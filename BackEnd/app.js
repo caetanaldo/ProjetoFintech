@@ -1,6 +1,6 @@
 import express, { json } from "express";
 import { connect } from "./database/sqlConnection.js";
-import tasksRouter from "./routes/tasksroutes.js";
+import contasRouter from "./routes/contaRoutes.js";
 import cors from "cors"
 
 import 'dotenv/config'
@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(json())
-app.use('/', tasksRouter)
+app.use('/', contasRouter)
 
 
 app.listen(PORT, ()=>{
