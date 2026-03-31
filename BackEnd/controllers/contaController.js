@@ -37,6 +37,21 @@ const contaController = {
             res.status(500).json({ error: err.message });
         }
     },
+    
+    async getBalance(req, res) {
+        try {
+            const conta = await Conta.findByPk(req.params.id);
+    
+            if (!conta) {
+                return res.status(404).json({ error: "Conta não encontrada" });
+            }
+    
+            res.json({ balance: conta.balance });
+    
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    },
 
     async update(req, res) {
         try {

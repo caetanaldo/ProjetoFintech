@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/sqlConnection.js";
-import Account from "./Account.js";
+import Conta from "./Conta.js";
 
 const Transacao = sequelize.define("Transacao", {
     type: {
@@ -14,7 +14,7 @@ const Transacao = sequelize.define("Transacao", {
 });
 
 // relacionamento
-Account.hasMany(Transacao, { foreignKey: "accountId" });
-Transacao.belongsTo(Account, { foreignKey: "accountId" });
+Conta.hasMany(Transacao, { foreignKey: "accountId" });
+Transacao.belongsTo(Conta, { foreignKey: "accountId" });
 
 export default Transacao;

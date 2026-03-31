@@ -1,19 +1,25 @@
-import express, { json } from "express";
+import dotenv from "dotenv";
+dotenv.config();
+import express from "express";
 import { connect } from "./database/sqlConnection.js";
 import contasRouter from "./routes/contaRoutes.js";
-import cors from "cors"
+import trasacaoRoutes from "./routes/transacaoRoutes.js";
+import cors from "cors";
 
-import 'dotenv/config'
 
-const app = express()
+const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(json())
-app.use('/', contasRouter)
+app.use(express.json());
 
+// rotas organizadas
+app.use("/contas", contasRouter);
+app.use("/transactions", trasacaoRoutes);
+console.log("USER:", process.env.DBUSER);
+console.log("PASS:", process.env.DBPASSWORD);
 
-app.listen(PORT, ()=>{
-    connect();
-    console.log(`Servidor rodando em http://localhost:${PORT}`)
-})
+app.listen(PORT, async () => {
+    await connect();
+    console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+});
