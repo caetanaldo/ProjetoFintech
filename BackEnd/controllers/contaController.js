@@ -1,5 +1,6 @@
 import { createConta } from "../services/contaService.js";
 import Conta from "../models/Conta.js";
+import User from "../models/User.js";
 
 const contaController = {
 
@@ -7,11 +8,24 @@ const contaController = {
         try {
             const { name, email, password } = req.body;
 
+            if(!name || !email || !password) {
+                return res.status(400).json({erro:"Preencha todos os campos"});
+            }
+
+            //validação email duplicado
+            const existingUser = await User.findOne({
+                where:{email}
+            });
+            if(existingUser){
+                return res.status(400).json({error:"Email ja cadastrado"})
+            }
+
             const result = await createConta({ name, email, password });
 
             res.status(201).json(result);
         } catch (err) {
-            res.status(400).json({ error: err.message });
+            console.log(err)
+            res.status(500).json({ error: err.message });
         }
     },
 
@@ -20,6 +34,7 @@ const contaController = {
             const contas = await Conta.findAll();
             res.json(contas);
         } catch (err) {
+            console.log(err)
             res.status(500).json({ error: err.message });
         }
     },
@@ -37,7 +52,7 @@ const contaController = {
             res.status(500).json({ error: err.message });
         }
     },
-    
+
     async getBalance(req, res) {
         try {
             const conta = await Conta.findByPk(req.params.id);
